@@ -1,0 +1,14 @@
+{
+	"name": "PAI-locale",
+	"description": "PAI Locale plugin",
+	"version": "0.1.0",
+	"author": "Christian Tellnes <christian@tellnes.no> (http://christian.tellnes.com)",
+	"php": "load.php",
+	
+	"licenses": [ 
+		{
+			"type": "MIT",
+			"url": "https://github.com/KrooniX/js-dateFormat/raw/master/LICENSE"
+		}
+	]
+}
