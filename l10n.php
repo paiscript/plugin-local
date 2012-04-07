@@ -217,3 +217,26 @@ function pai_is_textdomain_loaded( $domain ) {
   return isset( $l10n[$domain] );
 }
 
+function pai_translate_pageinfo($pageinfo) {
+  $keys = @pai_conf('plugins', 'locale', 'pageinfo');
+  if (!$keys) {
+    $keys = array('title');
+  }
+
+  foreach($keys AS $key) {
+    if (!$pageinfo[$key]) { continue; }
+
+    if (is_string($pageinfo[$key])) {
+      $pageinfo[$key] = pai_translate($pageinfo[$key]);
+    }
+    else if (is_array($pageinfo[$key])) {
+      $pageinfo[$key] = array_map('pai_translate', $pageinfo[$key]);
+    }
+    else if (is_object($pageinfo[$key])) {
+      $pageinfo[$key] = pai_translate_pageinfo($pageinfo[$key]);
+    }
+  }
+
+  return $pageinfo;
+}
+

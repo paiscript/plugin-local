@@ -9,3 +9,5 @@ require($path.'/l10n.php');
 
 
 pai_load_default_textdomain();
+
+pai_add_filter('pageinfo', 'pai_translate_pageinfo');
