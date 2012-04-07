@@ -3,43 +3,43 @@
 
 
 function pai_get_locale() {
-	if (defined('PAI_LOCALE')) {
-		return PAI_LOCALE;
-	}
-	
-	$conf = pai_conf('plugins', 'locale');
-	
-	$client_header = explode(',', @$_SERVER['HTTP_ACCEPT_LANGUAGE']);
+  if (defined('PAI_LOCALE')) {
+    return PAI_LOCALE;
+  }
 
-	if (count($client_header) < 1) {
-		return false;
-	}
+  $conf = pai_conf('plugins', 'locale');
 
-	$locale = false;
-	
-	$available = $conf['available'];
-	if (!is_array($available)) {
-		$available = explode(',', $available);
-	}
+  $client_header = explode(',', @$_SERVER['HTTP_ACCEPT_LANGUAGE']);
 
-	foreach ($client_header AS $raw_entry) {
-		$temp = explode(';', $raw_entry);
-		$temp = trim($temp[0]);
-		
-		if (in_array($temp, $available)) {
-			$locale = $temp;
-			break;
-		}
-	}
+  if (count($client_header) < 1) {
+    return false;
+  }
 
-	if (!$locale) {
-		$locale = $conf['default'];
-	}
-	
-	$locale = pai_apply_filters('locale', $locale);
-	
-	define('PAI_LOCALE', $locale);
-	return $locale;
+  $locale = false;
+
+  $available = $conf['available'];
+  if (!is_array($available)) {
+    $available = explode(',', $available);
+  }
+
+  foreach ($client_header AS $raw_entry) {
+    $temp = explode(';', $raw_entry);
+    $temp = trim($temp[0]);
+
+    if (in_array($temp, $available)) {
+      $locale = $temp;
+      break;
+    }
+  }
+
+  if (!$locale) {
+    $locale = $conf['default'];
+  }
+
+  $locale = pai_apply_filters('locale', $locale);
+
+  define('PAI_LOCALE', $locale);
+  return $locale;
 }
 
 /**
@@ -54,13 +54,13 @@ function pai_get_locale() {
  * @return string Translated text
  */
 function pai_translate( $text, $domain = 'default' ) {
-	$translations = &pai_get_translations_for_domain( $domain );
-	return pai_apply_filters( 'gettext', $translations->translate( $text ), $text, $domain );
+  $translations = &pai_get_translations_for_domain( $domain );
+  return pai_apply_filters( 'gettext', $translations->translate( $text ), $text, $domain );
 }
 
 function pai_translate_with_gettext_context( $text, $context, $domain = 'default' ) {
-	$translations = &pai_get_translations_for_domain( $domain );
-	return pai_apply_filters( 'gettext_with_context', $translations->translate( $text, $context ), $text, $context, $domain );
+  $translations = &pai_get_translations_for_domain( $domain );
+  return pai_apply_filters( 'gettext_with_context', $translations->translate( $text, $context ), $text, $context, $domain );
 }
 
 /**
@@ -75,9 +75,9 @@ function pai_translate_with_gettext_context( $text, $context, $domain = 'default
  * @return string Translated text
  */
 if (!function_exists('__')) {
-	function __( $text, $domain = 'default' ) {
-		return pai_translate( $text, $domain );
-	}
+  function __( $text, $domain = 'default' ) {
+    return pai_translate( $text, $domain );
+  }
 }
 
 
@@ -92,9 +92,9 @@ if (!function_exists('__')) {
  * @param string $domain Optional. Domain to retrieve the translated text
  */
 if (!function_exists('_e')) {
-	function _e( $text, $domain = 'default' ) {
-		echo pai_translate( $text, $domain );
-	}
+  function _e( $text, $domain = 'default' ) {
+    echo pai_translate( $text, $domain );
+  }
 }
 
 
@@ -115,9 +115,9 @@ if (!function_exists('_e')) {
  * @return string Translated context string without pipe
  */
 if (!function_exists('_x')) {
-	function _x( $text, $context, $domain = 'default' ) {
-		return pai_translate_with_gettext_context( $text, $context, $domain );
-	}
+  function _x( $text, $context, $domain = 'default' ) {
+    return pai_translate_with_gettext_context( $text, $context, $domain );
+  }
 }
 
 /**
@@ -137,19 +137,19 @@ if (!function_exists('_x')) {
  * @return bool true on success, false on failure
  */
 function pai_load_textdomain( $domain, $mofile ) {
-	global $l10n;
+  global $l10n;
 
-	if ( !is_readable( $mofile ) ) return false;
+  if ( !is_readable( $mofile ) ) return false;
 
-	$mo = new MO();
-	if ( !$mo->import_from_file( $mofile ) ) return false;
+  $mo = new MO();
+  if ( !$mo->import_from_file( $mofile ) ) return false;
 
-	if ( isset( $l10n[$domain] ) )
-		$mo->merge_with( $l10n[$domain] );
+  if ( isset( $l10n[$domain] ) )
+    $mo->merge_with( $l10n[$domain] );
 
-	$l10n[$domain] = &$mo;
+  $l10n[$domain] = &$mo;
 
-	return true;
+  return true;
 }
 
 /**
@@ -160,19 +160,19 @@ function pai_load_textdomain( $domain, $mofile ) {
  * @return bool Whether textdomain was unloaded
  */
 function pai_unload_textdomain( $domain ) {
-	global $l10n;
+  global $l10n;
 
-	$plugin_override = pai_apply_filters( 'override_unload_textdomain', false, $domain );
+  $plugin_override = pai_apply_filters( 'override_unload_textdomain', false, $domain );
 
-	if ( $plugin_override )
-		return true;
+  if ( $plugin_override )
+    return true;
 
-	if ( isset( $l10n[$domain] ) ) {
-		unset( $l10n[$domain] );
-		return true;
-	}
+  if ( isset( $l10n[$domain] ) ) {
+    unset( $l10n[$domain] );
+    return true;
+  }
 
-	return false;
+  return false;
 }
 
 /**
@@ -181,12 +181,12 @@ function pai_unload_textdomain( $domain ) {
  * @since 2.0.0
  */
 function pai_load_default_textdomain() {
-	$locale = pai_get_locale();
+  $locale = pai_get_locale();
 
-	$folder = @pai_conf('plugins', 'locale', 'folder');
-	if (!$folder) { $folder = 'languages'; }
+  $folder = @pai_conf('plugins', 'locale', 'folder');
+  if (!$folder) { $folder = 'languages'; }
 
-	pai_load_textdomain( 'default', PAI_FILEPATH_CONTENT . $folder . "/$locale.mo" );
+  pai_load_textdomain( 'default', PAI_FILEPATH_CONTENT . $folder . "/$locale.mo" );
 }
 
 
@@ -198,11 +198,11 @@ function pai_load_default_textdomain() {
  * @return object A Translation instance
  */
 function &pai_get_translations_for_domain( $domain ) {
-	global $l10n;
-	if ( !isset( $l10n[$domain] ) ) {
-		$l10n[$domain] = new NOOP_Translations;
-	}
-	return $l10n[$domain];
+  global $l10n;
+  if ( !isset( $l10n[$domain] ) ) {
+    $l10n[$domain] = new NOOP_Translations;
+  }
+  return $l10n[$domain];
 }
 
 /**
@@ -213,7 +213,7 @@ function &pai_get_translations_for_domain( $domain ) {
  * @return bool Whether there are translations
  */
 function pai_is_textdomain_loaded( $domain ) {
-	global $l10n;
-	return isset( $l10n[$domain] );
+  global $l10n;
+  return isset( $l10n[$domain] );
 }
 
