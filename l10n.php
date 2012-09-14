@@ -224,16 +224,16 @@ function pai_translate_pageinfo($pageinfo) {
   }
 
   foreach($keys AS $key) {
-    if (!$pageinfo[$key]) { continue; }
+    if (!$pageinfo->$key) { continue; }
 
-    if (is_string($pageinfo[$key])) {
-      $pageinfo[$key] = pai_translate($pageinfo[$key]);
+    if (is_string($pageinfo->$key)) {
+      $pageinfo->$key = pai_translate($pageinfo->$key);
     }
     else if (is_array($pageinfo[$key])) {
-      $pageinfo[$key] = array_map('pai_translate', $pageinfo[$key]);
+      $pageinfo->$key = array_map('pai_translate', $pageinfo->$key);
     }
-    else if (is_object($pageinfo[$key])) {
-      $pageinfo[$key] = pai_translate_pageinfo($pageinfo[$key]);
+    else if (is_object($pageinfo->$key)) {
+      $pageinfo->$key = pai_translate_pageinfo($pageinfo->$key);
     }
   }
 
