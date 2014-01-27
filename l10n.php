@@ -223,20 +223,30 @@ function pai_translate_pageinfo($pageinfo) {
     $keys = array('title');
   }
 
-  foreach($keys AS $key) {
-    if (!$pageinfo->$key) { continue; }
-
-    if (is_string($pageinfo->$key)) {
-      $pageinfo->$key = pai_translate($pageinfo->$key);
-    }
-    else if (is_array($pageinfo[$key])) {
-      $pageinfo->$key = array_map('pai_translate', $pageinfo->$key);
-    }
-    else if (is_object($pageinfo->$key)) {
-      $pageinfo->$key = pai_translate_pageinfo($pageinfo->$key);
+  foreach($pageinfo AS $info) {
+    foreach($keys AS $key) {
+      if ($info->$key) {
+        $info->$key = pai_translate_pageinfo_recursive($info->$key);
+      }
     }
   }
 
   return $pageinfo;
+}
+
+function pai_translate_pageinfo_recursive($info) {
+  if (is_string($info)) {
+    return pai_translate($info);
+  }
+
+  if (is_array($info)) {
+    return array_map('pai_translate', $info);
+  }
+
+  if (is_object($pageinfo->$key)) {
+    return pai_translate_pageinfo($info);
+  }
+
+  return $info;
 }
 
