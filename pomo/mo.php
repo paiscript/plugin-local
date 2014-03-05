@@ -181,7 +181,7 @@ class MO extends Gettext_Translations {
 			$translation = $reader->substr( $strings, $t['pos'], $t['length'] );
 
 			if ('' === $original) {
-				$this->set_headers($this->make_headers($translation));
+				@$this->set_headers($this->make_headers($translation));
 			} else {
 				$entry = &$this->make_entry($original, $translation);
 				$this->entries[$entry->key()] = &$entry;
