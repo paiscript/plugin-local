@@ -224,7 +224,7 @@ function pai_translate_pageinfo($pageinfo) {
   }
 
   foreach($keys AS $key) {
-    if (!$pageinfo->$key) { continue; }
+    if (!@$pageinfo->$key) { continue; }
 
     if (is_string($pageinfo->$key)) {
       $pageinfo->$key = pai_translate($pageinfo->$key);
@@ -239,4 +239,3 @@ function pai_translate_pageinfo($pageinfo) {
 
   return $pageinfo;
 }
-
